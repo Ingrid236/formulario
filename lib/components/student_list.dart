@@ -10,22 +10,31 @@ class StudentList extends StatelessWidget {
   Widget build(BuildContext context) {
     final students = context.watch<StudentProvider>().students;
 
-    if (students.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Center(
-          child: Text('Nenhum acadêmico cadastrado.'),
-        ),
-      );
-    }
-
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: students.length,
-      itemBuilder: (context, index) {
-        return StudentItem(student: students[index]);
-      },
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Container(
+        constraints: const BoxConstraints(maxHeight: 400),
+        child: students.isEmpty
+            ? const Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Center(
+                  child: Text(
+                    'Nenhum acadêmico cadastrado.',
+                    style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                  ),
+                ),
+              )
+            : ListView.separated(
+                padding: const EdgeInsets.all(8.0),
+                itemCount: students.length,
+                physics: const AlwaysScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  return StudentItem(student: students[index]);
+                },
+              ),
+      ),
     );
   }
 }
